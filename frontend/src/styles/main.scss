@@ -3,12 +3,11 @@
 /* Brand Font: Baradig */
 @font-face {
   font-family: 'Baradig';
-  src: local('Baradig'), local('Baradig-Regular'),
-       url('/fonts/Baradig.woff2') format('woff2'),
+  src: url('/fonts/Baradig.woff2') format('woff2'),
        url('/fonts/Baradig.woff') format('woff');
-  font-display: swap;
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 .font-brand {

@@ -38,6 +38,33 @@ export default defineConfig([
   },
 ])
 ```
+## Fonts
+
+Custom webfonts should be placed in `public/fonts/` so that Vite serves them at build time with absolute paths like `/fonts/YourFont.woff2`.
+
+Example (`Baradig`):
+
+1. Add the font files:
+   - `public/fonts/Baradig.woff2`
+   - `public/fonts/Baradig.woff`
+2. Reference them with a single `@font-face` (located in `src/styles/main.scss`):
+
+```scss
+@font-face {
+  font-family: 'Baradig';
+  src: url('/fonts/Baradig.woff2') format('woff2'),
+       url('/fonts/Baradig.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+Guidelines:
+- Use absolute `/fonts/...` URLs (no `../` relative paths) so resolution works in all components.
+- Keep only one `@font-face` block per weight/style to avoid duplication.
+- Prefer `woff2` first, then `woff` as fallback.
+- Always set `font-display: swap` for better performance.
 
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
