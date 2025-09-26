@@ -201,7 +201,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({
               value={formData.fullName}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105"
               placeholder="Enter your full name"
             />
           </div>
@@ -218,7 +218,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105"
               placeholder="Enter your email address"
             />
           </div>
@@ -235,7 +235,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({
               value={formData.phone}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105"
               placeholder="Enter your phone number"
             />
           </div>
@@ -251,7 +251,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({
               value={formData.projectType}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105 cursor-pointer"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-blue-400 transform focus:scale-105 cursor-pointer"
             >
               {projectTypes.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -273,7 +273,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({
               onChange={handleChange}
               required
               rows={4}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none resize-vertical hover:border-blue-400 transform focus:scale-105"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none resize-vertical hover:border-blue-400 transform focus:scale-105"
               placeholder="Please describe your project requirements, timeline, budget range, and any specific features you need..."
             />
           </div>

@@ -12,7 +12,7 @@ const ContactForm: React.FC = () => {
             </label>
             <input
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary-500"
               placeholder="John"
             />
           </div>
@@ -22,7 +22,7 @@ const ContactForm: React.FC = () => {
             </label>
             <input
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary-500"
               placeholder="Doe"
             />
           </div>
@@ -33,7 +33,7 @@ const ContactForm: React.FC = () => {
           </label>
           <input
             type="email"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary-500"
             placeholder="john@example.com"
           />
         </div>
@@ -43,7 +43,7 @@ const ContactForm: React.FC = () => {
           </label>
           <input
             type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary-500"
             placeholder="Project inquiry"
           />
         </div>
@@ -53,7 +53,7 @@ const ContactForm: React.FC = () => {
           </label>
           <textarea
             rows={5}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary-500"
             placeholder="Tell us about your project..."
           ></textarea>
         </div>
