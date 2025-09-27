@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { COMPANY_PHONE, COMPANY_PHONE_TEL } from '../config/company';
+import { useMutation } from 'convex/react';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    company: '' // honeypot
   });
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  // Using string path; ensure `npx convex dev` has generated api including contact.submit
+  const submitMutation = useMutation('contact.submit:submit' as any);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -15,13 +23,54 @@ const Contact: React.FC = () => {
       [name]: value
     }));
   };
+  const validate = () => {
+    const fieldErrors: { name?: string; email?: string; message?: string } = {};
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const message = formData.message.trim();
+    if (name.length < 2 || name.length > 100) fieldErrors.name = 'Name must be 2-100 characters';
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) fieldErrors.email = 'Invalid email format';
+    if (message.length < 10 || message.length > 5000) fieldErrors.message = 'Message must be 10-5000 characters';
+    setErrors(fieldErrors);
+    return Object.keys(fieldErrors).length === 0;
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', email: '', message: '' });
+    setServerError(null);
+    if (!validate()) return;
+    if (formData.company) { // honeypot filled
+      setStatus('error');
+      setServerError('Submission rejected.');
+      return;
+    }
+    setStatus('submitting');
+    try {
+      const res: any = await submitMutation({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        message: formData.message.trim(),
+        company: formData.company,
+        userAgent: navigator.userAgent,
+      });
+      if (res?.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '', company: '' });
+        setErrors({});
+      } else {
+        if (res.code === 'VALIDATION_ERROR') {
+          setErrors(res.fieldErrors || {});
+        } else if (res.code === 'RATE_LIMIT') {
+          setServerError('Too many submissions. Please try again later.');
+        } else {
+          setServerError('Something went wrong. Please try again.');
+        }
+        setStatus('error');
+      }
+    } catch (err) {
+      setServerError('Network or server error. Please retry.');
+      setStatus('error');
+    }
   };
 
   return (
@@ -39,7 +88,13 @@ const Contact: React.FC = () => {
           {/* Contact Form */}
           <div className="bg-gray-50 p-8 rounded-2xl animate-slide-in-left hover:shadow-lg transition-all duration-500">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              {status === 'success' && (
+                <div className="p-4 rounded-lg bg-green-100 text-green-800 text-sm">Thank you! Your message has been sent.</div>
+              )}
+              {status === 'error' && serverError && (
+                <div className="p-4 rounded-lg bg-red-100 text-red-800 text-sm" role="alert">{serverError}</div>
+              )}
               {/* Name Field */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -55,6 +110,7 @@ const Contact: React.FC = () => {
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 outline-none hover:border-blue-400 focus:scale-105 shadow-sm"
                   placeholder="Enter your full name"
                 />
+                {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
               </div>
 
               {/* Email Field */}
@@ -72,6 +128,7 @@ const Contact: React.FC = () => {
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 outline-none hover:border-blue-400 focus:scale-105 shadow-sm"
                   placeholder="Enter your email address"
                 />
+                {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
               </div>
 
               {/* Message Field */}
@@ -89,14 +146,30 @@ const Contact: React.FC = () => {
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 outline-none resize-vertical hover:border-blue-400 focus:scale-105 shadow-sm"
                   placeholder="Tell us about your project..."
                 />
+                {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
+              </div>
+
+              {/* Honeypot (visually hidden) */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="company">Company</label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  autoComplete="off"
+                  tabIndex={-1}
+                />
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl glow-on-hover group"
+                disabled={status === 'submitting'}
+                className={`w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl glow-on-hover group ${status === 'submitting' ? 'opacity-60 cursor-not-allowed' : 'hover:from-blue-700 hover:to-purple-700 transform hover:scale-105'}`}
               >
-                <span className="group-hover:animate-pulse">Send Message</span>
+                <span className="group-hover:animate-pulse">{status === 'submitting' ? 'Sending…' : 'Send Message'}</span>
               </button>
             </form>
           </div>
